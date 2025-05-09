@@ -1,0 +1,24 @@
+# Utilisation d'une image Python légère
+FROM python:3.11-slim
+
+# Définir le répertoire de travail dans le conteneur
+WORKDIR /app
+
+# Copier les fichiers de l'application dans le conteneur
+COPY ./src .
+
+# Installer les dépendances nécessaires
+RUN pip install --no-cache-dir fastapi uvicorn sqlalchemy psycopg2-binary python-dotenv requests
+
+# Installer pg_isready
+RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
+
+# Attendre que la bdd soit complètement initialisée
+COPY wait_for_postgres.sh /wait_for_postgres.sh
+RUN chmod +x /wait_for_postgres.sh
+
+# Exposer le port utilisé par FastAPI
+EXPOSE 8000
+
+# Commande pour démarrer l'API avec Uvicorn
+CMD ["/wait_for_postgres.sh", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
