@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Récupérer les valeurs depuis le .env
-DATABASE_URL = os.getenv('DATABASE_URL')
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Create engine
 engine = create_engine(DATABASE_URL)
@@ -33,6 +33,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 # Base pour les modèles SQLAlchemy
 Base = declarative_base()

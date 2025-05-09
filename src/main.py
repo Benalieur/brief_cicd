@@ -12,12 +12,13 @@ from models import Todo, TodoUpdate
 async def lifespan(app: FastAPI):
     # Vérifie si la table "todos" existe
     inspector = inspect(engine)
-    if 'todos' not in inspector.get_table_names():
+    if "todos" not in inspector.get_table_names():
         print("Table 'todos' absente, création en cours...")
         create_tables()
     else:
         print("Table 'todos' déjà présente")
     yield
+
 
 app = FastAPI(lifespan=lifespan)
 
@@ -47,7 +48,9 @@ def get_todo(todo_id: int, db: Session = Depends(get_db)):
 @app.post("/todos", response_model=Todo)
 def create_todo(todo: Todo, db: Session = Depends(get_db)):
     # Crée une nouvelle tâche sans fournir d'ID (SQLite s'en charge)
-    new_todo = TodoDB(title=todo.title, description=todo.description, completed=todo.completed)
+    new_todo = TodoDB(
+        title=todo.title, description=todo.description, completed=todo.completed
+    )
     db.add(new_todo)
     db.commit()
     db.refresh(new_todo)
