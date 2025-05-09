@@ -3,7 +3,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from contextlib import asynccontextmanager
 from sqlalchemy import inspect
 
-from database import Base, engine, get_db, TodoDB, create_tables
+from database import engine, get_db, TodoDB, create_tables
 from models import Todo, TodoUpdate
 
 
