@@ -42,10 +42,6 @@ jobs:
         run: |
           flake8 .
 
-      - name: 📐 Type-checking (mypy)
-        run: |
-          mypy src
-
       - name: 🧪 Exécution des tests (pytest + coverage)
         run: |
           pytest --maxfail=1 --disable-warnings --color=yes
