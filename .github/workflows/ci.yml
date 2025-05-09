@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/**'
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test-and-quality:
+    name: Tests & Qualité de code
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.12]
+    steps:
+      - name: 📥 Checkout du code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: 🔍 Installer les dépendances
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: 🖤 Vérification du format (black)
+        run: |
+          black --check .
+
+      - name: 🚫 Linting (flake8)
+        run: |
+          flake8 .
+
+      - name: 📐 Type-checking (mypy)
+        run: |
+          mypy src
+
+      - name: 🧪 Exécution des tests (pytest + coverage)
+        run: |
+          pytest --maxfail=1 --disable-warnings --color=yes
+
+      - name: 📊 Génération du rapport de couverture
+        if: success()
+        run: |
+          coverage html
