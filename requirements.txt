@@ -25,7 +25,6 @@ jsonschema==4.23.0
 jsonschema-specifications==2025.4.1
 MarkupSafe==3.0.2
 mccabe==0.7.0
--e git+ssh://git@github.com/Benalieur/brief_cicd.git@b626186fc21db4f5af76c11909c7e097efe24ae2#egg=my_todo_app
 mypy==1.15.0
 mypy_extensions==1.1.0
 narwhals==1.38.2
